@@ -1,11 +1,11 @@
 const std = @import("std");
 
-pub const BaseCommand = @import("base.zig").BaseCommand;
-pub const SingleCommand = @import("single.zig").SingleCommand;
-pub const MultiCommand = @import("multi.zig").MultiCommand;
-pub const ErrorCommand = @import("error.zig").ErrorCommand;
-pub const CallCounterCommand = @import("callcounter.zig").CallCounterCommand;
-pub const LBRRCommand = @import("lbrr.zig").LBRRCommand;
+pub const BaseCommand = @import("base.zig");
+pub const SingleCommand = @import("single.zig");
+pub const MultiCommand = @import("multi.zig");
+pub const ErrorCommand = @import("error.zig");
+pub const CallCounterCommand = @import("callcounter.zig");
+pub const LBRRCommand = @import("lbrr.zig");
 
 test "models/commands" {
     std.testing.refAllDecls(@This());
