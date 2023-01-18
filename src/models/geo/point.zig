@@ -22,9 +22,9 @@ pub const Point = struct {
     }
 };
 
-const testing = std.testing;
-
 test "models/geo/Point.init" {
+    const testing = std.testing;
+
     var p = Point.init(100, 200);
 
     try testing.expectEqual(@as(i32, 100), p.getX());

@@ -29,7 +29,6 @@ pub const Rectangle = struct {
 };
 
 // Rectangle Tests
-
 test "models/geo/Rectangle.init" {
     const testing = std.testing;
 

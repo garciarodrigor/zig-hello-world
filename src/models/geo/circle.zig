@@ -1,6 +1,5 @@
 const std = @import("std");
 const Point = @import("point.zig").Point;
-const Shape = @import("shape.zig").Shape;
 
 const PI: f32 = 3.1415;
 
@@ -27,6 +26,7 @@ pub const Circle = struct {
         return self.radio;
     }
 
+    //Implement Shape interface
     pub fn getArea(self: *const Self) f32 {
         return PI * 2.0 * self.radio;
     }
