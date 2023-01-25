@@ -1,8 +1,8 @@
 const std = @import("std");
 
-const Point = @import("point.zig").Point;
-const Rectangle = @import("rectangle.zig").Rectangle;
-const Circle = @import("circle.zig").Circle;
+const Point = @import("Point.zig");
+const Rectangle = @import("Rectangle.zig");
+const Circle = @import("Circle.zig");
 
 // Usage: Shape(Circle).init(obj)
 pub fn Shape(comptime T: type) type {
@@ -38,14 +38,16 @@ pub const ShapeV2 = struct {
     pub fn init(object: anytype) Self {
         const T = @TypeOf(object);
 
+        const gen = struct {
+            fn getArea(ptr: usize) f32 {
+                return @intToPtr(T, ptr).getArea();
+            }
+        };
+
         return Self{
             .object = @ptrToInt(object),
             .vtable = &.{
-                .getArea = struct {
-                    fn getArea(self: *const Self) f32 {
-                        return @intToPtr(T, self.object).getArea();
-                    }
-                }.getArea,
+                .getArea = gen.getArea,
             },
         };
     }
