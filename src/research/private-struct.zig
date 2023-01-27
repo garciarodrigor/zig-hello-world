@@ -4,6 +4,7 @@ const Allocator = std.mem.Allocator;
 
 // Hides the data structure from importing files
 const point = struct {
+    allocator: Allocator,
     x: i32,
     y: i32,
 };
@@ -17,16 +18,20 @@ pub const Point = opaque {
 
     pub fn init(allocator: Allocator, x: i32, y: i32) !Self {
         var s: *point = try allocator.create(point);
+        s.allocator = allocator;
         s.x = x;
         s.y = y;
         return @ptrCast(Self, s);
     }
-    pub fn deinit(self: Self, allocator: Allocator) void {
-        allocator.destroy(@ptrCast(*point, self));
+
+    pub fn deinit(self: Self) void {
+        self.to().allocator.destroy(@ptrCast(*point, self));
     }
+
     pub fn getX(self: Self) i32 {
         return self.to().x;
     }
+
     pub fn getY(self: Self) i32 {
         return self.to().y;
     }
@@ -35,7 +40,7 @@ pub const Point = opaque {
 test "Point" {
     const ally = testing.allocator;
     const p = try Point.init(ally, 2, 3);
-    defer p.deinit(ally);
+    defer p.deinit();
 
     try testing.expectEqual(@as(i32, 2), p.getX());
     try testing.expectEqual(@as(i32, 3), p.getY());
