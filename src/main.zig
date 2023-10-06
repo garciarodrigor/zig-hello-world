@@ -1,5 +1,6 @@
 const std = @import("std");
 const models = @import("models/main.zig");
+const apis = @import("apis/main.zig");
 
 const Talker = struct {
     pub fn talk(s: anytype) void {
@@ -79,9 +80,9 @@ pub fn main() anyerror!void {
         Talker.talk(value);
     }
 
-    var shapes: [2]models.geo.Shape(models.geo.Circle) = undefined;
-    shapes[0] = models.geo.Shape(models.geo.Circle).init(c);
-    shapes[1] = models.geo.Shape(models.geo.Circle).init(c);
+    var shapes: [2]apis.geo.Shape = undefined;
+    shapes[0] = apis.geo.Shape.init(&c);
+    shapes[1] = apis.geo.Shape.init(&r);
 
     std.log.info("{any} area={d} {any} area={d}\n", .{ shapes[1], shapes[1].getArea(), r, r.getArea() });
 }

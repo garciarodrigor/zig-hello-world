@@ -29,9 +29,9 @@ test "models/calc/Minus.init" {
     const testing = std.testing;
     const Value = @import("Value.zig");
 
-    const a = Value.init(10).operator();
-    const b = Value.init(5).operator();
+    const x = Value.init(10).operator();
+    const y = Value.init(5).operator();
 
-    const o = Self.init(a, b);
+    const o = Self.init(x, y);
     try testing.expectEqual(@as(anyerror!f32, 5), o.eval());
 }

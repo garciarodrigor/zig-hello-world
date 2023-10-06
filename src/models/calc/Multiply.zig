@@ -28,10 +28,12 @@ pub fn eval(self: *const Self) f32 {
 test "models/calc/Multiply.init" {
     const testing = std.testing;
     const Value = @import("Value.zig");
+    const Minus = @import("Minus.zig");
 
     const a = Value.init(10).operator();
     const b = Value.init(5).operator();
+    const ab = Minus.init(a, b).operator();
 
-    const o = Self.init(a, b);
-    try testing.expectEqual(@as(anyerror!f32, 50), o.eval());
+    const o = Self.init(ab, b);
+    try testing.expectEqual(@as(anyerror!f32, 25), o.eval());
 }
