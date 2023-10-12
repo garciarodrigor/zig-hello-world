@@ -22,7 +22,7 @@ pub fn build(b: *std.build.Builder) void {
         run_cmd.addArgs(args);
     }
 
-    const tests = b.addTest("src/main.zig");
+    const tests = b.addTest("src/tests.zig");
     tests.setBuildMode(.Debug);
 
     const run_step = b.step("run", "Run the app");
