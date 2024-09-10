@@ -2,7 +2,6 @@ const std = @import("std");
 const testing = std.testing;
 
 const apis = @import("../../apis/main.zig");
-const SingleCommand = @import("single.zig");
 
 const Self = @This();
 
@@ -30,7 +29,7 @@ pub fn getTotalCalls(self: *const Self) u32 {
     return self.getOkCalls() + self.getErrCalls();
 }
 
-pub fn command(self: *Self) apis.commands.Command {
+pub fn command(self: *const Self) apis.commands.Command {
     return apis.commands.Command.init(self);
 }
 
@@ -47,14 +46,18 @@ pub fn execute(self: *Self) anyerror!void {
     return self.super.execute();
 }
 
-test "CallCounterCommand.init" {
+test "init" {
+    const SingleCommand = @import("SingleCommand.zig");
+
     const obj = Self.init(SingleCommand.init("test-name").command());
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
-test "CallCounterCommand.execute" {
-    var obj = Self.init(SingleCommand.init("test-name").command());
+test "execute" {
+    const SingleCommand = @import("SingleCommand.zig");
+
+    const obj = Self.init(SingleCommand.init("test-name").command());
 
     try obj.execute();
     try obj.command().execute();

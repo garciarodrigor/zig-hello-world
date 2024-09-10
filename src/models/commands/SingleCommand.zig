@@ -2,7 +2,7 @@ const std = @import("std");
 const testing = std.testing;
 
 const apis = @import("../../apis/main.zig");
-const BaseCommand = @import("base.zig");
+const BaseCommand = @import("BaseCommand.zig");
 
 const Self = @This();
 
@@ -26,13 +26,13 @@ pub fn command(self: *const Self) apis.commands.Command {
     return apis.commands.Command.init(self);
 }
 
-test "SingleCommand.init" {
+test "init" {
     const obj = Self.init("test-name");
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
-test "models/commands/SingleCommand.execute" {
+test "execute" {
     const obj = Self.init("test-name");
 
     try obj.execute();
