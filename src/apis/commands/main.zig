@@ -3,7 +3,7 @@ const std = @import("std");
 pub const Command = struct {
     const Self = @This();
 
-    object: *const anyopaque = undefined,
+    object: *anyopaque = undefined,
     vtable: *const VTable = undefined,
 
     const VTable = struct {
@@ -24,12 +24,12 @@ pub const Command = struct {
             }
 
             fn from(self: *const Self) T {
-                return @alignCast(@ptrCast(self.object));
+                return @ptrCast(@alignCast(self.object));
             }
         };
 
         return .{
-            .object = object,
+            .object = @constCast(object),
             .vtable = &.{
                 .execute = gen.execute,
                 .getName = gen.getName,
@@ -59,24 +59,35 @@ test "Command" {
         const Self = @This();
 
         name: []const u8,
+        counter: u32,
 
         pub fn init(name: []const u8) Self {
             return Self{
                 .name = name,
+                .counter = 0,
             };
         }
 
-        pub fn execute(_: *const Self) anyerror!void {
+        pub fn execute(self: *Self) anyerror!void {
+            self.counter += 1;
             return;
         }
 
         pub fn getName(self: *const Self) []const u8 {
             return self.name;
         }
+
+        pub fn getCounter(self: *const Self) u32 {
+            return self.counter;
+        }
     };
 
-    const o = TestCommand.init("test");
+    var o = TestCommand.init("test");
     const c = Command.init(&o);
 
+    try c.execute();
+    try o.execute();
+
     try testing.expectEqual(o.getName(), c.getName());
+    try testing.expectEqual(2, o.getCounter());
 }

@@ -30,7 +30,7 @@ pub fn getArea(self: *const Self) f32 {
     return PI * 2.0 * self.radio;
 }
 
-test "Circle.init" {
+test "init" {
     const testing = std.testing;
     const p = Point.init(100, 100);
     const c = Self.init(p, 10);

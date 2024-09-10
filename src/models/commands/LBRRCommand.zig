@@ -2,7 +2,7 @@ const std = @import("std");
 const testing = std.testing;
 
 const apis = @import("../../apis/main.zig");
-const BaseCommand = @import("base.zig");
+const BaseCommand = @import("BaseCommand.zig");
 
 const Self = @This();
 
@@ -31,22 +31,23 @@ pub fn command(self: *Self) apis.commands.Command {
     return apis.commands.Command.init(self);
 }
 
-test "LBRRCommand.init" {
+test "init" {
     var obj = Self.init("test-name", &.{});
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
-test "LBRRCommand.execute" {
-    const SingleCommand = @import("single.zig");
-    const CallCounterCommand = @import("callcounter.zig");
+test "execute" {
+    const SingleCommand = @import("SingleCommand.zig");
+    const CallCounterCommand = @import("CallCounterCommand.zig");
+    const Command = apis.commands.Command;
 
     const c = SingleCommand.init("test");
     var c1 = CallCounterCommand.init(c.command());
     var c2 = CallCounterCommand.init(c.command());
     // const cmds = [_]apis.commands.Command{ c1.command(), c2.command() };
 
-    var obj = Self.init("test-name", &.{ c1.command(), c2.command() });
+    var obj = Self.init("test-name", &.{ Command.init(&c1), Command.init(&c2) });
 
     var i: u8 = 20;
 

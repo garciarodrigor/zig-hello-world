@@ -29,10 +29,6 @@ pub fn getTotalCalls(self: *const Self) u32 {
     return self.getOkCalls() + self.getErrCalls();
 }
 
-pub fn command(self: *const Self) apis.commands.Command {
-    return apis.commands.Command.init(self);
-}
-
 // Implement Command Interface
 pub fn getName(self: *const Self) []const u8 {
     return self.super.getName();
@@ -48,19 +44,21 @@ pub fn execute(self: *Self) anyerror!void {
 
 test "init" {
     const SingleCommand = @import("SingleCommand.zig");
+    const Command = apis.commands.Command;
 
-    const obj = Self.init(SingleCommand.init("test-name").command());
+    const obj = Self.init(Command.init(&SingleCommand.init("test-name")));
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
 test "execute" {
     const SingleCommand = @import("SingleCommand.zig");
+    const Command = apis.commands.Command;
 
-    const obj = Self.init(SingleCommand.init("test-name").command());
+    var obj = Self.init(Command.init(&SingleCommand.init("test-name")));
 
     try obj.execute();
-    try obj.command().execute();
+    try obj.execute();
 
     try testing.expectEqual(@as(u32, 2), obj.getOkCalls());
     try testing.expectEqual(@as(u32, 0), obj.getErrCalls());

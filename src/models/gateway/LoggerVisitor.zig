@@ -22,7 +22,7 @@ pub fn visitExtension(self: *const Self, r: *const Extension) !void {
     self.visitResource(r);
 }
 
-test "LoggerVisitor.init" {
+test "init" {
     const r = Resource.init("Test", "some-name", "some-namespace");
     const obj = Self.init();
 

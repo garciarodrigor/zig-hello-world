@@ -20,7 +20,7 @@ pub fn getY(self: *const Self) i32 {
     return self.y;
 }
 
-test "Point.init" {
+test "init" {
     const testing = std.testing;
 
     var p = Self.init(100, 200);

@@ -27,7 +27,7 @@ pub fn getArea(self: *const Self) f32 {
 }
 
 // Rectangle Tests
-test "Rectangle.init" {
+test "init" {
     const testing = std.testing;
 
     const p1 = Point.init(100, 200);
