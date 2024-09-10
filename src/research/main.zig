@@ -1,5 +1,7 @@
 const std = @import("std");
 
-test "research" {
+test "all" {
+    _ = @import("interface.zig");
+    _ = @import("private-struct.zig");
     _ = @import("interfaces/main.zig");
 }

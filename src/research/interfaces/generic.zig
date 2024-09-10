@@ -66,7 +66,7 @@ fn Shape(comptime T: type) type {
     };
 }
 
-test "research/interfaces/generic" {
+test "generic" {
     const testing = std.testing;
     const p = Point.init(100, 100);
     const c = Circle.init(p, 10);

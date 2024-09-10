@@ -13,7 +13,7 @@ pub const Point = opaque {
     const Self = *align(@alignOf(point)) @This();
 
     fn self(p: Self) *point {
-        return @ptrCast(*point, p);
+        return @ptrCast(p);
     }
 
     pub fn init(allocator: Allocator, x: i32, y: i32) !Self {
@@ -23,11 +23,12 @@ pub const Point = opaque {
         s.x = x;
         s.y = y;
 
-        return @ptrCast(Self, s);
+        return @ptrCast(s);
     }
 
     pub fn deinit(p: Self) void {
-        p.self().allocator.destroy(@ptrCast(*point, p));
+        const o = p.self();
+        o.allocator.destroy(o);
     }
 
     pub fn setX(p: Self, x: i32) void {

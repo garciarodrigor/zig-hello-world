@@ -53,7 +53,7 @@ const Circle = struct {
 const Shape = struct {
     const Self = @This();
 
-    object: usize = undefined,
+    object: *anyopaque = undefined,
     vtable: *const VTable = undefined,
 
     const VTable = struct {
@@ -69,12 +69,16 @@ const Shape = struct {
 
         const vtable = struct {
             fn getArea(self: *const Self) f32 {
-                return @as(T, self.object).getArea();
+                return from(self).getArea();
+            }
+
+            fn from(self: *const Self) T {
+                return @alignCast(@ptrCast(self.object));
             }
         };
 
         return Self{
-            .object = @intFromPtr(object),
+            .object = @constCast(object),
             .vtable = &.{
                 .getArea = vtable.getArea,
             },
@@ -82,7 +86,7 @@ const Shape = struct {
     }
 };
 
-test "research/interfaces/ducktype" {
+test "ducktype" {
     const testing = std.testing;
     const p = Point.init(100, 100);
     const c = Circle.init(p, 10);

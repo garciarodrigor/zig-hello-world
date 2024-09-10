@@ -3,7 +3,7 @@ const std = @import("std");
 pub const Identificable = struct {
     const Self = @This();
 
-    object: usize = undefined,
+    object: *anyopaque = undefined,
     vtable: *const VTable = undefined,
 
     const VTable = struct {
@@ -19,12 +19,15 @@ pub const Identificable = struct {
 
         const vtable = struct {
             fn getId(self: *const Self) u32 {
-                return @as(T, self.object).getId();
+                return from(self).getId();
+            }
+            inline fn from(self: *const Self) T {
+                return @alignCast(@ptrCast(self.object));
             }
         };
 
         return Self{
-            .object = @intFromPtr(object),
+            .object = @constCast(object),
             .vtable = &.{
                 .getId = vtable.getId,
             },
@@ -43,11 +46,11 @@ const Human = struct {
         };
     }
 
-    pub fn identificable(self: *Self) Identificable {
+    pub fn identificable(self: *const Self) Identificable {
         return Identificable.init(self);
     }
 
-    pub fn getId(self: *Self) u32 {
+    pub fn getId(self: *const Self) u32 {
         return self.id;
     }
 };

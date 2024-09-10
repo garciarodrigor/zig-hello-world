@@ -65,14 +65,14 @@ const Human = struct {
 };
 
 pub fn main() anyerror!void {
-    var p1 = models.geo.Point.init(100, 100);
-    var p2 = models.geo.Point.init(200, 200);
+    const p1 = models.geo.Point.init(100, 100);
+    const p2 = models.geo.Point.init(200, 200);
 
     var r = models.geo.Rectangle.init(p1, p2);
     var c = models.geo.Circle.init(p1, 100);
 
-    var h = Human.init("Rodrigo");
-    var cat = Cat.init("Rocky");
+    const h = Human.init("Rodrigo");
+    const cat = Cat.init("Rocky");
 
     const col = .{ h, cat };
 

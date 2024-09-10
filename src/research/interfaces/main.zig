@@ -1,6 +1,6 @@
 const std = @import("std");
 
-test "research/interfaces" {
+test "all" {
     _ = @import("ducktype.zig");
     _ = @import("generic.zig");
     _ = @import("taggedunion.zig");

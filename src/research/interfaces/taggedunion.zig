@@ -94,7 +94,7 @@ const Shape = union(enum) {
     }
 };
 
-test "research/interfaces/taggedunion" {
+test "taggedunion" {
     const testing = std.testing;
     const p = Point.init(100, 100);
     const c = Circle.init(p, 10);
