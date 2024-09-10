@@ -54,7 +54,7 @@ pub const Extension = struct {
 
 pub const ExtensionArray = []const Extension;
 
-test "models/gateway/Extension.accept" {
+test "Extension.accept" {
     const TestVisitor = struct {
         const Self = @This();
         fn init() Self {
@@ -73,7 +73,7 @@ test "models/gateway/Extension.accept" {
     try obj.accept(&TestVisitor.init());
 }
 
-test "models/gateway/Extension.accept/withExtends" {
+test "Extension.accept/withExtends" {
     const TestVisitor = struct {
         const Self = @This();
         const calls = [_][]const u8{ "some-name", "ext1", "ext2" };

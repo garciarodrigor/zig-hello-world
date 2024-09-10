@@ -3,7 +3,7 @@ const std = @import("std");
 pub const Shape = struct {
     const Self = @This();
 
-    object: usize = undefined,
+    object: *const anyopaque = undefined,
     vtable: *const VTable = undefined,
 
     const VTable = struct {
@@ -19,12 +19,16 @@ pub const Shape = struct {
 
         const vtable = struct {
             fn getArea(self: *const Self) f32 {
-                return @intToPtr(T, self.object).getArea();
+                return from(self).getArea();
+            }
+
+            fn from(self: *const Self) T {
+                return @alignCast(@ptrCast(self.object));
             }
         };
 
         return Self{
-            .object = @ptrToInt(object),
+            .object = object,
             .vtable = &.{
                 .getArea = vtable.getArea,
             },
@@ -32,7 +36,7 @@ pub const Shape = struct {
     }
 };
 
-test "apis/geo/Shape" {
+test "Shape" {
     const testing = std.testing;
 
     const TestShape = struct {

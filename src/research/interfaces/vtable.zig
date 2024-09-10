@@ -69,12 +69,12 @@ const Shape = struct {
 
         const vtable = struct {
             fn getArea(self: *const Self) f32 {
-                return @intToPtr(T, self.object).getArea();
+                return @as(T, self.object).getArea();
             }
         };
 
         return Self{
-            .object = @ptrToInt(object),
+            .object = @intFromPtr(object),
             .vtable = &.{
                 .getArea = vtable.getArea,
             },

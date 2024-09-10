@@ -26,13 +26,13 @@ pub fn execute(_: *const Self) anyerror!void {
     return apis.commands.CommandError.Uninplemented;
 }
 
-test "models/commands/BaseCommand.init" {
+test "BaseCommand.init" {
     const obj = Self.init("test-name");
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
-test "models/commands/BaseCommand.execute" {
+test "BaseCommand.execute" {
     const obj = Self.init("test-name");
 
     try testing.expectError(apis.commands.CommandError.Uninplemented, obj.execute());

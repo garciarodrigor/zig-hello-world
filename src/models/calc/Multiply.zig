@@ -25,7 +25,7 @@ pub fn eval(self: *const Self) f32 {
     return self.in1.eval() * self.in2.eval();
 }
 
-test "models/calc/Multiply.init" {
+test "init" {
     const testing = std.testing;
     const Value = @import("Value.zig");
     const Minus = @import("Minus.zig");

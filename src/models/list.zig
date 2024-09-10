@@ -22,7 +22,7 @@ pub fn List(comptime T: type) type {
     };
 }
 
-test "models/List.length" {
+test "List.length" {
     const testing = std.testing;
 
     var items = [_]i32{ 1, 2, 3, 4 };

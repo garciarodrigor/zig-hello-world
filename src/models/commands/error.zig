@@ -28,13 +28,13 @@ pub fn command(self: *const Self) apis.commands.Command {
     return apis.commands.Command.init(self);
 }
 
-test "models/commands/ErrorCommand.init" {
+test "ErrorCommand.init" {
     const obj = Self.init("test-name", apis.commands.CommandError.Uninplemented);
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
-test "models/commands/ErrorCommand.execute" {
+test "ErrorCommand.execute" {
     const Error = error{
         Unknown,
     };

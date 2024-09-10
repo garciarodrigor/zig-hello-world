@@ -31,13 +31,13 @@ pub fn command(self: *Self) apis.commands.Command {
     return apis.commands.Command.init(self);
 }
 
-test "models/commands/LBRRCommand.init" {
+test "LBRRCommand.init" {
     var obj = Self.init("test-name", &.{});
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
-test "models/commands/LBRRCommand.execute" {
+test "LBRRCommand.execute" {
     const SingleCommand = @import("single.zig");
     const CallCounterCommand = @import("callcounter.zig");
 

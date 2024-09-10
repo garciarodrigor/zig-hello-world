@@ -6,6 +6,6 @@ pub const Minus = @import("Minus.zig");
 pub const Multiply = @import("Multiply.zig");
 pub const Pi = @import("Pi.zig");
 
-test "models/calc" {
+test "all" {
     std.testing.refAllDecls(@This());
 }

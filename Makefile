@@ -1,2 +1,2 @@
 test:
-	zig build test 2>&1 | cat
+	zig test src/tests.zig 2>&1 | cat

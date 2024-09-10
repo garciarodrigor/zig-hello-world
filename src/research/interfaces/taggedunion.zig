@@ -65,7 +65,7 @@ const Rectangle = struct {
 
     // Implement Shape interface
     pub fn getArea(self: *const Self) f32 {
-        return @intToFloat(f32, (self.p2.getX() - self.p1.getX()) * (self.p2.getY() - self.p1.getY()));
+        return @floatFromInt((self.p2.getX() - self.p1.getX()) * (self.p2.getY() - self.p1.getY()));
     }
 };
 

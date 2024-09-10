@@ -18,7 +18,7 @@ pub fn eval(_: *const Self) f32 {
     return 3.141516;
 }
 
-test "models/calc/Pi.init" {
+test "init" {
     const testing = std.testing;
     const o = Self.init();
 

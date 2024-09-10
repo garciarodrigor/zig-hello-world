@@ -24,7 +24,7 @@ pub fn Shape(comptime T: type) type {
 pub const ShapeV2 = struct {
     const Self = @This();
 
-    object: usize = undefined,
+    object: *const anyopaque = undefined,
     vtable: *const VTable = undefined,
 
     const VTable = struct {
@@ -39,13 +39,17 @@ pub const ShapeV2 = struct {
         const T = @TypeOf(object);
 
         const gen = struct {
-            fn getArea(ptr: usize) f32 {
-                return @intToPtr(T, ptr).getArea();
+            fn getArea(self: *const Self) f32 {
+                return from(self).getArea();
+            }
+
+            fn from(self: *const Self) T {
+                return @alignCast(@ptrCast(self.object));
             }
         };
 
         return Self{
-            .object = @ptrToInt(object),
+            .object = object,
             .vtable = &.{
                 .getArea = gen.getArea,
             },
@@ -56,30 +60,34 @@ pub const ShapeV2 = struct {
 pub const ShapeV3 = struct {
     const Self = @This();
 
-    ptr: usize = undefined,
-    getAreaFn: *const fn (ptr: usize) f32,
+    ptr: *const anyopaque,
+    getAreaFn: *const fn (self: *const Self) f32,
 
     pub fn init(pointer: anytype) Self {
         const T = @TypeOf(pointer);
 
         const gen = struct {
-            fn getArea(ptr: usize) f32 {
-                return @intToPtr(T, ptr).getArea();
+            fn getArea(self: *const Self) f32 {
+                return from(self).getArea();
+            }
+
+            inline fn from(self: *const Self) T {
+                return @alignCast(@ptrCast(self.ptr));
             }
         };
 
         return .{
-            .ptr = @ptrToInt(pointer),
+            .ptr = pointer,
             .getAreaFn = gen.getArea,
         };
     }
 
-    pub fn getArea(r: Self) f32 {
-        return r.getAreaFn(r.ptr);
+    pub fn getArea(self: *const Self) f32 {
+        return self.getAreaFn(self);
     }
 };
 
-test "models/geo/Shape" {
+test "Shape" {
     const testing = std.testing;
 
     const p1 = Point.init(100, 100);
@@ -90,18 +98,22 @@ test "models/geo/Shape" {
     try testing.expectEqual(s.getArea(), r.getArea());
 }
 
-test "models/geo/ShapeV2" {
+test "ShapeV2" {
     const testing = std.testing;
 
     const p1 = Point.init(100, 100);
     const p2 = Point.init(200, 200);
     const r = Rectangle.init(p1, p2);
-    const s = ShapeV2.init(&r);
+    const sr = ShapeV2.init(&r);
 
-    try testing.expectEqual(s.getArea(), r.getArea());
+    const c = Circle.init(p1, 10.0);
+    const sc = ShapeV2.init(&c);
+
+    try testing.expectEqual(sr.getArea(), r.getArea());
+    try testing.expectEqual(sc.getArea(), c.getArea());
 }
 
-test "models/geo/ShapeV3" {
+test "ShapeV3" {
     const testing = std.testing;
 
     const p1 = Point.init(100, 100);

@@ -1,36 +1,48 @@
+const std = @import("std");
+
 pub const Command = struct {
     const Self = @This();
 
-    ptr: usize = undefined,
-    executeFn: *const fn (ptr: usize) anyerror!void,
-    getNameFn: *const fn (ptr: usize) []const u8,
+    object: *const anyopaque = undefined,
+    vtable: *const VTable = undefined,
 
-    pub fn init(pointer: anytype) Self {
-        const T = @TypeOf(pointer);
+    const VTable = struct {
+        execute: *const fn (self: *const Self) anyerror!void,
+        getName: *const fn (self: *const Self) []const u8,
+    };
+
+    pub fn init(object: anytype) Self {
+        const T = @TypeOf(object);
 
         const gen = struct {
-            fn execute(self: usize) anyerror!void {
-                return @intToPtr(T, self).execute();
+            fn execute(self: *const Self) anyerror!void {
+                return from(self).execute();
             }
 
-            fn getName(self: usize) []const u8 {
-                return @intToPtr(T, self).getName();
+            fn getName(self: *const Self) []const u8 {
+                return from(self).getName();
+            }
+
+            fn from(self: *const Self) T {
+                return @alignCast(@ptrCast(self.object));
             }
         };
 
         return .{
-            .ptr = @ptrToInt(pointer),
-            .executeFn = gen.execute,
-            .getNameFn = gen.getName,
+            .object = object,
+            .vtable = &.{
+                .execute = gen.execute,
+                .getName = gen.getName,
+            },
         };
     }
 
     pub fn getName(self: *const Self) []const u8 {
-        return self.getNameFn(self.ptr);
+        return self.vtable.getName(self);
     }
 
     pub fn execute(self: *const Self) anyerror!void {
-        return self.executeFn(self.ptr);
+        return self.vtable.execute(self);
     }
 };
 
@@ -39,3 +51,32 @@ pub const CommandArray = []const Command;
 pub const CommandError = error{
     Uninplemented,
 };
+
+test "Command" {
+    const testing = std.testing;
+
+    const TestCommand = struct {
+        const Self = @This();
+
+        name: []const u8,
+
+        pub fn init(name: []const u8) Self {
+            return Self{
+                .name = name,
+            };
+        }
+
+        pub fn execute(_: *const Self) anyerror!void {
+            return;
+        }
+
+        pub fn getName(self: *const Self) []const u8 {
+            return self.name;
+        }
+    };
+
+    const o = TestCommand.init("test");
+    const c = Command.init(&o);
+
+    try testing.expectEqual(o.getName(), c.getName());
+}

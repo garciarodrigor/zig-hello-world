@@ -3,7 +3,7 @@ const std = @import("std");
 pub const Operator = struct {
     const Self = @This();
 
-    object: usize = undefined,
+    object: *const anyopaque = undefined,
     vtable: *const VTable = undefined,
 
     const VTable = struct {
@@ -19,12 +19,16 @@ pub const Operator = struct {
 
         const vtable = struct {
             fn eval(self: *const Self) f32 {
-                return @intToPtr(T, self.object).eval();
+                return from(self).eval();
+            }
+
+            fn from(self: *const Self) T {
+                return @alignCast(@ptrCast(self.object));
             }
         };
 
         return Self{
-            .object = @ptrToInt(object),
+            .object = object,
             .vtable = &.{
                 .eval = vtable.eval,
             },
@@ -32,7 +36,7 @@ pub const Operator = struct {
     }
 };
 
-test "apis/calc/Operator" {
+test "Operator" {
     const testing = std.testing;
 
     const TestOperator = struct {

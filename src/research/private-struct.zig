@@ -12,28 +12,38 @@ const point = struct {
 pub const Point = opaque {
     const Self = *align(@alignOf(point)) @This();
 
-    fn to(self: Self) *point {
-        return @ptrCast(*point, self);
+    fn self(p: Self) *point {
+        return @ptrCast(*point, p);
     }
 
     pub fn init(allocator: Allocator, x: i32, y: i32) !Self {
         var s: *point = try allocator.create(point);
+
         s.allocator = allocator;
         s.x = x;
         s.y = y;
+
         return @ptrCast(Self, s);
     }
 
-    pub fn deinit(self: Self) void {
-        self.to().allocator.destroy(@ptrCast(*point, self));
+    pub fn deinit(p: Self) void {
+        p.self().allocator.destroy(@ptrCast(*point, p));
     }
 
-    pub fn getX(self: Self) i32 {
-        return self.to().x;
+    pub fn setX(p: Self, x: i32) void {
+        p.self().x = x;
     }
 
-    pub fn getY(self: Self) i32 {
-        return self.to().y;
+    pub fn getX(p: Self) i32 {
+        return p.self().x;
+    }
+
+    pub fn setY(p: Self, y: i32) void {
+        p.self().y = y;
+    }
+
+    pub fn getY(p: Self) i32 {
+        return p.self().y;
     }
 };
 

@@ -65,7 +65,7 @@ pub const Gateway = struct {
     }
 };
 
-test "models/gateway/Gateway.accept" {
+test "Gateway.accept" {
     const TestVisitor = struct {
         const Self = @This();
         fn init() Self {

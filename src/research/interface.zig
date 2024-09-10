@@ -19,13 +19,16 @@ pub const Identificable = struct {
 
         const vtable = struct {
             fn getId(self: *const Self) u32 {
-                return @intToPtr(T, self.object).getId();
+                return @as(T, self.object).getId();
             }
         };
 
-        return Self{ .object = @ptrToInt(object), .vtable = &.{
-            .getId = vtable.getId,
-        } };
+        return Self{
+            .object = @intFromPtr(object),
+            .vtable = &.{
+                .getId = vtable.getId,
+            },
+        };
     }
 };
 

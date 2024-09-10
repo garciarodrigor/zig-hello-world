@@ -1,11 +1,11 @@
 const std = @import("std");
 
 pub const calc = @import("calc/main.zig");
-pub const commands = @import("commands/main.zig");
+// pub const commands = @import("commands/main.zig");
 pub const geo = @import("geo/main.zig");
 pub const gateway = @import("gateway/main.zig");
-pub const List = @import("list.zig");
+pub const list = @import("list.zig");
 
-test "models" {
+test "all" {
     std.testing.refAllDecls(@This());
 }

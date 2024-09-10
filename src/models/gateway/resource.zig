@@ -47,7 +47,7 @@ pub const Resource = struct {
     }
 };
 
-test "models/gateway/Resource.init" {
+test "Resource.init" {
     const obj = Resource.init("Test", "some-name", "some-namespace");
 
     try testing.expectEqual(@as([]const u8, "Test"), obj.getKind());
@@ -55,7 +55,7 @@ test "models/gateway/Resource.init" {
     try testing.expectEqual(@as([]const u8, "some-namespace"), obj.getNamespace());
 }
 
-test "models/gateway/Resource.accept" {
+test "Resource.accept" {
     const TestVisitor = struct {
         const Self = @This();
         fn init() Self {

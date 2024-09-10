@@ -5,6 +5,6 @@ pub const Extension = @import("extension.zig").Extension;
 pub const Gateway = @import("gateway.zig").Gateway;
 pub const LoggerVisitor = @import("logger_visitor.zig");
 
-test "models/gateway" {
+test "all" {
     std.testing.refAllDecls(@This());
 }

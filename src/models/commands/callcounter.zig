@@ -47,13 +47,13 @@ pub fn execute(self: *Self) anyerror!void {
     return self.super.execute();
 }
 
-test "models/commands/CallCounterCommand.init" {
+test "CallCounterCommand.init" {
     const obj = Self.init(SingleCommand.init("test-name").command());
 
     try testing.expectEqual(@as([]const u8, "test-name"), obj.getName());
 }
 
-test "models/commands/CallCounterCommand.execute" {
+test "CallCounterCommand.execute" {
     var obj = Self.init(SingleCommand.init("test-name").command());
 
     try obj.execute();

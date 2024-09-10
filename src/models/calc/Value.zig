@@ -22,7 +22,7 @@ pub fn eval(self: *const Self) f32 {
     return self.value;
 }
 
-test "models/calc/Value.init" {
+test "init" {
     const testing = std.testing;
     const o = Self.init(10);
     try testing.expectEqual(@as(anyerror!f32, 10), o.eval());
