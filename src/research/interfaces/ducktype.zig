@@ -51,38 +51,8 @@ const Circle = struct {
 };
 
 const Shape = struct {
-    const Self = @This();
-
-    object: *anyopaque = undefined,
-    vtable: *const VTable = undefined,
-
-    const VTable = struct {
-        getArea: *const fn (self: *const Self) f32,
-    };
-
-    pub fn getArea(self: *const Self) f32 {
-        return self.vtable.getArea(self);
-    }
-
-    pub fn init(object: anytype) Self {
-        const T = @TypeOf(object);
-
-        const vtable = struct {
-            fn getArea(self: *const Self) f32 {
-                return from(self).getArea();
-            }
-
-            fn from(self: *const Self) T {
-                return @alignCast(@ptrCast(self.object));
-            }
-        };
-
-        return Self{
-            .object = @constCast(object),
-            .vtable = &.{
-                .getArea = vtable.getArea,
-            },
-        };
+    pub fn getArea(self: anytype) f32 {
+        return self.getArea();
     }
 };
 
@@ -91,13 +61,11 @@ test "ducktype" {
     const p = Point.init(100, 100);
     const c = Circle.init(p, 10);
 
-    var shapes: [2]Shape = undefined;
-    shapes[0] = Shape.init(&p);
-    shapes[1] = Shape.init(&c);
+    const shapes = .{ p, c };
 
     try testing.expectEqual(8, @sizeOf(Point));
     try testing.expectEqual(12, @sizeOf(Circle));
-    try testing.expectEqual(16, @sizeOf(Shape));
-    try testing.expectEqual(@as(anyerror!f32, 0), shapes[0].getArea());
-    try testing.expectEqual(@as(anyerror!f32, 6.28300018e+01), shapes[1].getArea());
+    try testing.expectEqual(0, @sizeOf(Shape));
+    try testing.expectEqual(@as(anyerror!f32, 0), Shape.getArea(shapes[0]));
+    try testing.expectEqual(@as(anyerror!f32, 6.28300018e+01), Shape.getArea(shapes[1]));
 }
