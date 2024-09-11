@@ -91,9 +91,7 @@ test "vtable" {
     const p = Point.init(100, 100);
     const c = Circle.init(p, 10);
 
-    var shapes: [2]Shape = undefined;
-    shapes[0] = Shape.init(&p);
-    shapes[1] = Shape.init(&c);
+    const shapes = .{ Shape.init(&p), Shape.init(&c) };
 
     try testing.expectEqual(16, @sizeOf(Shape));
     try testing.expectEqual(@as(anyerror!f32, 0), shapes[0].getArea());

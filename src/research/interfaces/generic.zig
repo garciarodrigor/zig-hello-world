@@ -68,13 +68,12 @@ fn Shape(comptime T: type) type {
 
 test "generic" {
     const testing = std.testing;
+
     const p = Point.init(100, 100);
     const c = Circle.init(p, 10);
-    const s = Shape(Circle);
 
-    var shapes: [1]s = undefined;
-    shapes[0] = s.init(c);
+    const shapes = &.{ Shape(Circle).init(c), Shape(Point).init(p) };
 
-    try testing.expectEqual(12, @sizeOf(s));
+    try testing.expectEqual(12, @sizeOf(Shape(Circle)));
     try testing.expectEqual(@as(anyerror!f32, 6.28300018e+01), shapes[0].getArea());
 }
