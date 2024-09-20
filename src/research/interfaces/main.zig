@@ -5,4 +5,5 @@ test "all" {
     _ = @import("generic.zig");
     _ = @import("taggedunion.zig");
     _ = @import("vtable.zig");
+    _ = @import("fatpointer.zig");
 }
